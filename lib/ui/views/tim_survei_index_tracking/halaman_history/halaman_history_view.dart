@@ -113,7 +113,9 @@ class HalamanHistoryView extends StatelessWidget {
                                           color: mainColor,
                                         ),
                                         onPressed: () {
-                                          // model.showDetailCaleg(model.listCalegModel[i]);
+                                          model.showDetailPemilih(
+                                            model.listPemilih[i],
+                                          );
                                         },
                                       ),
                                     ),

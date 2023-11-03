@@ -55,9 +55,12 @@ class HalamanSurveiView extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: model.imageBytes != null
-                                    ? Image.memory(
-                                        model.imageBytes!,
-                                        fit: BoxFit.fill,
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.memory(
+                                          model.imageBytes!,
+                                          fit: BoxFit.fill,
+                                        ),
                                       )
                                     : const Icon(
                                         Icons.credit_card_rounded,

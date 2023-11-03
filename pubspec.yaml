@@ -52,6 +52,7 @@ dependencies:
   http_parser:
   intl:
   shared_preferences:
+  easy_image_viewer: 
 
 dev_dependencies:
   flutter_test:

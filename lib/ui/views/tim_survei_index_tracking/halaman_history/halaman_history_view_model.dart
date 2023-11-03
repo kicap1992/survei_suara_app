@@ -1,6 +1,7 @@
 import 'package:cek_suara_app/model/my_response.model.dart';
 import 'package:cek_suara_app/model/pemilih_model.dart';
 
+import '../../../../app/app.bottomsheets.dart';
 import '../../../../app/app.logger.dart';
 import '../../../../app/core/custom_base_view_model.dart';
 
@@ -36,5 +37,15 @@ class HalamanHistoryViewModel extends CustomBaseViewModel {
     } finally {
       setBusy(false);
     }
+  }
+
+  showDetailPemilih(PemilihModel listPemilih) async {
+    await bottomSheetService.showCustomSheet(
+      variant: BottomSheetType.detailSuaraPemilihBottomSheetView,
+      title: 'Detail Suara Pemilih',
+      description: 'Detail Suara Pemilih',
+      // isScrollControlled: true,
+      data: listPemilih,
+    );
   }
 }

@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../../app/app.bottomsheets.dart';
 import '../../../../app/app.logger.dart';
 import '../../../../app/core/custom_base_view_model.dart';
 import '../../../../model/area_model.dart';
@@ -17,6 +16,7 @@ class HalamanSurveiViewModel extends CustomBaseViewModel {
   final formKey = GlobalKey<FormState>();
   TextEditingController ktpController = TextEditingController();
   TextEditingController namaController = TextEditingController();
+  TextEditingController noTPScontroller = TextEditingController();
 
   // image picker
   String? _imagePath;
@@ -25,11 +25,14 @@ class HalamanSurveiViewModel extends CustomBaseViewModel {
   Uint8List? imageBytes;
 
   // area
-  List<AreaModel> listAreaModel = [];
-  List<String> listAreaString = [];
-  List<AreaModel> allListAreaModel = [];
-  String? selectedArea;
-  int areaIndex = 0;
+  List<KecamatanModel> listKecamatanModel = [];
+  List<String> listKecamatanString = [];
+  List<KelurahanModel> listKelurahanModel = [];
+  List<String> listKelurahanString = [];
+  // List<AreaModel> allListKecamatanModel = [];
+  String? selectedKecamatan;
+  String? selectedKelurahan;
+  // int areaIndex = 0;
 
   // // caleg
   // List<CalegModel> listCalegModel = [];
@@ -59,17 +62,31 @@ class HalamanSurveiViewModel extends CustomBaseViewModel {
 
       // String? nik = await mySharedPrefs.getString('nik');
       var response = await httpService.get('area/cek_area/$nik');
-      log.i(response.data);
+      // log.i(response.data);
       MyResponseModel myResponseModel = MyResponseModel.fromJson(response.data);
-      AreaListModel areaListModel =
-          AreaListModel.fromJson(myResponseModel.data);
-      listAreaModel = areaListModel.area!;
-      allListAreaModel = areaListModel.area!;
-      for (var element in listAreaModel) {
-        listAreaString.add(element.namaArea!);
+      KecamatanDetail kecamatanDetail =
+          KecamatanDetail.fromJson(myResponseModel.data);
+
+      listKecamatanModel = kecamatanDetail.kecamatan!;
+      selectedKecamatan = listKecamatanModel[0].name!;
+      for (var element in listKecamatanModel) {
+        listKecamatanString.add(element.name!);
       }
-      selectedArea = listAreaString[0];
-      // int idArea = listAreaModel[0].idArea!;
+
+      // log.i('kecamatanDetail: ${kecamatanDetail.kecamatan}');
+
+      String idKecamatan = listKecamatanModel[0].kecamatanId!;
+      await getKelurahan(idKecamatan);
+
+      // AreaListModel areaListModel =
+      //     AreaListModel.fromJson(myResponseModel.data);
+      // listKecamatanModel = areaListModel.area!;
+      // allListKecamatanModel = areaListModel.area!;
+      // for (var element in listKecamatanModel) {
+      //   listKecamatanString.add(element.namaArea!);
+      // }
+      // selectedKecamatan = listKecamatanString[0];
+      // // int idArea = listKecamatanModel[0].idArea!;
       // await getCaleg(idArea);
 
       // getCaleg()
@@ -81,40 +98,30 @@ class HalamanSurveiViewModel extends CustomBaseViewModel {
     }
   }
 
-  // getCaleg(int idArea) async {
-  //   log.i('getCaleg');
-  //   log.i('idArea: $idArea');
-  //   selectedCaleg = null;
-  //   listCalegModel = [];
-  //   listCalegString = [];
-  //   setBusy(true);
-  //   try {
-  //     var response = await httpService.get('caleg/area/$idArea');
-  //     log.i(response.data);
-  //     MyResponseModel myResponseModel = MyResponseModel.fromJson(response.data);
-  //     // log.i(myResponseModel.data);
-  //     CalegListModel calegListModel =
-  //         CalegListModel.fromJson(myResponseModel.data);
-  //     listCalegModel = calegListModel.caleg!;
-  //     for (var element in listCalegModel) {
-  //       listCalegString.add(element.namaCaleg!);
-  //     }
-  //     selectedCaleg = listCalegString[0];
-  //     // log.i('listCalegModel: $listCalegModel');
-  //     // log.i('listCalegString: $listCalegString');
-  //     // log.i('selectedCaleg: $selectedCaleg');
-  //   } catch (e) {
-  //     log.e(e);
-  //   } finally {
-  //     setBusy(false);
-  //   }
-  // }
-
-  // changeArea(String? value) async {
-  //   int idArea = listAreaModel[listAreaString.indexOf(value!)].idArea!;
-  //   // log.i('idArea: $idArea');
-  //   await getCaleg(idArea);
-  // }
+  getKelurahan(String idKecamatan) async {
+    log.i('getKelurahan');
+    listKelurahanModel = [];
+    listKelurahanString = [];
+    selectedKelurahan = null;
+    setBusy(true);
+    try {
+      var response = await httpService.get('area/kelurahan/$idKecamatan');
+      // log.i(response.data);
+      MyResponseModel myResponseModel = MyResponseModel.fromJson(response.data);
+      KelurahanDetail kelurahanDetail =
+          KelurahanDetail.fromJson(myResponseModel.data);
+      // log.i('kelurahanDetail: ${kelurahanDetail.kelurahan}');
+      listKelurahanModel = kelurahanDetail.kelurahan!;
+      for (var element in listKelurahanModel) {
+        listKelurahanString.add(element.name!);
+      }
+      selectedKelurahan = listKelurahanString[0];
+    } catch (e) {
+      log.e(e);
+    } finally {
+      setBusy(false);
+    }
+  }
 
   void addImage() async {
     try {
@@ -132,48 +139,20 @@ class HalamanSurveiViewModel extends CustomBaseViewModel {
     }
   }
 
-  searchArea() async {
-    var res = await bottomSheetService.showCustomSheet(
-      variant: BottomSheetType.bottomSheetCariAreaView,
-      ignoreSafeArea: false,
-      isScrollControlled: true,
-    );
-
-    if (res!.confirmed) {
-      log.i('res.data: ${res.data}');
-
-      String area = res.data;
-      if (area == '') {
-        listAreaModel = allListAreaModel;
-      } else {
-        listAreaModel = [];
-        for (var element in allListAreaModel) {
-          if (element.namaArea!.toLowerCase().contains(area.toLowerCase())) {
-            listAreaModel.add(element);
-          }
-        }
-      }
-
-      listAreaString = [];
-      for (var element in listAreaModel) {
-        listAreaString.add(element.namaArea!);
-      }
-      selectedArea = listAreaString[0];
-      // int idArea = listAreaModel[0].idArea!;
-      // await getCaleg(idArea);
-      notifyListeners();
-    }
-  }
-
   uploadData() async {
     log.i('uploadData');
     setBusy(true);
     easyLoading.customLoading('Uploading data...');
     globalVar.backPressed = 'cantBack';
     try {
-      String idArea = listAreaModel[listAreaString.indexOf(selectedArea!)]
-          .idArea
-          .toString();
+      String idKecamatan =
+          listKecamatanModel[listKecamatanString.indexOf(selectedKecamatan!)]
+              .kecamatanId
+              .toString();
+      String idKelurahan =
+          listKelurahanModel[listKelurahanString.indexOf(selectedKelurahan!)]
+              .kelurahanId
+              .toString();
       var fomData = FormData.fromMap(
         {
           'ktp': ktpController.text,
@@ -184,8 +163,10 @@ class HalamanSurveiViewModel extends CustomBaseViewModel {
             filename: imageFile!.name,
             contentType: MediaType('image', 'jpg'),
           ),
-          'idArea': idArea,
+          'idKecamatan': idKecamatan,
+          'idKelurahan': idKelurahan,
           'nik': nik,
+          'noTPS': noTPScontroller.text,
         },
       );
       await httpService.postWithFormData('tim_survei', fomData);
@@ -200,6 +181,7 @@ class HalamanSurveiViewModel extends CustomBaseViewModel {
       _imagePath = null;
       imageFile = null;
       imageBytes = null;
+      noTPScontroller.clear();
       notifyListeners();
     } catch (e) {
       log.e(e);

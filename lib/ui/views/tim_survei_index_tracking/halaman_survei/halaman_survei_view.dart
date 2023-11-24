@@ -120,11 +120,11 @@ class HalamanSurveiView extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
                         const Text(
-                          '  Pilih Area',
+                          '  Pilih Kecamatan',
                         ),
                         if (model.isBusy)
                           const Center(child: CircularProgressIndicator()),
-                        if (!model.isBusy && model.selectedArea != null)
+                        if (!model.isBusy && model.selectedKecamatan != null)
                           Container(
                             width: double.infinity,
                             height: 60,
@@ -135,49 +135,100 @@ class HalamanSurveiView extends StatelessWidget {
                                 color: sixthGrey,
                               ),
                             ),
-                            child: Row(
-                              children: [
-                                // icon search
-                                IconButton(
-                                  onPressed: () async =>
-                                      await model.searchArea(),
-                                  icon: const Icon(
-                                    Icons.search,
-                                    color: sixthGrey,
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                        isExpanded: true,
-                                        value: model.selectedArea!,
-                                        icon: const Icon(Icons.arrow_drop_down),
-                                        iconSize: 24,
-                                        elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                        onChanged: (String? newValue) {
-                                          model.log.i(newValue);
-                                          model.selectedArea = newValue!;
-                                          // model.changeArea(newValue);
-                                          model.notifyListeners();
-                                        },
-                                        items: model.listAreaString
-                                            .map<DropdownMenuItem<String>>(
-                                                (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value,
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                          );
-                                        }).toList()),
-                                  ),
-                                ),
-                              ],
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                  isExpanded: true,
+                                  value: model.selectedKecamatan!,
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  style: const TextStyle(color: Colors.black),
+                                  onChanged: (String? newValue) {
+                                    model.log.i(newValue);
+                                    model.selectedKecamatan = newValue!;
+                                    String kecamatanId = model
+                                        .listKecamatanModel[model
+                                            .listKecamatanString
+                                            .indexOf(newValue)]
+                                        .kecamatanId!;
+                                    model.getKelurahan(kecamatanId);
+                                    // model.changeArea(newValue);
+                                    model.notifyListeners();
+                                  },
+                                  items: model.listKecamatanString
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value,
+                                          overflow: TextOverflow.ellipsis),
+                                    );
+                                  }).toList()),
                             ),
                           ),
+
+                        const SizedBox(height: 20),
+                        const Text(
+                          '  Pilih Kelurahan / Desa',
+                        ),
+                        if (model.isBusy)
+                          const Center(child: CircularProgressIndicator()),
+                        if (!model.isBusy && model.selectedKelurahan != null)
+                          Container(
+                            width: double.infinity,
+                            height: 60,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25),
+                              border: Border.all(
+                                color: sixthGrey,
+                              ),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                  isExpanded: true,
+                                  value: model.selectedKelurahan!,
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  style: const TextStyle(color: Colors.black),
+                                  onChanged: (String? newValue) {
+                                    model.log.i(newValue);
+                                    model.selectedKelurahan = newValue!;
+                                    // model.changeArea(newValue);
+                                    model.notifyListeners();
+                                  },
+                                  items: model.listKelurahanString
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value,
+                                          overflow: TextOverflow.ellipsis),
+                                    );
+                                  }).toList()),
+                            ),
+                          ),
+
+                        const SizedBox(height: 20),
+                        MyTextFormField(
+                          hintText: 'Masukkan No TPS',
+                          labelText: 'Nomor TPS',
+                          maxLength: 2,
+                          suffixIcon: const Icon(Icons.account_balance),
+                          controller: model.noTPScontroller,
+                          keyboardType: TextInputType.number,
+                          validator: Validatorless.multiple(
+                            [
+                              Validatorless.required(
+                                  'Nomor TPS tidak boleh kosong'),
+                              Validatorless.number('Nomor TPS harus angka'),
+                              Validatorless.min(1, 'Nomor TPS minimal 1 digit'),
+                              Validatorless.max(
+                                  2, 'Nomor TPS maksimal 2 digit'),
+                            ],
+                          ),
+                        ),
                         // const SizedBox(height: 20),
                         // const Text(
                         //   '  Pilih Caleg',

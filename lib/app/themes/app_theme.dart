@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
@@ -17,9 +15,9 @@ ThemeData appTheme = ThemeData(
     centerTitle: true,
   ),
   textTheme: TextTheme(
-    headline1: regularTextStyle.copyWith(fontSize: 32),
-    headline2: regularTextStyle.copyWith(fontSize: 20),
-    headline3: regularTextStyle.copyWith(fontSize: 18),
+    displayLarge: regularTextStyle.copyWith(fontSize: 32),
+    displayMedium: regularTextStyle.copyWith(fontSize: 20),
+    displaySmall: regularTextStyle.copyWith(fontSize: 18),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(

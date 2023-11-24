@@ -11,6 +11,7 @@ import '../ui/views/login_screen/login_screen_view.dart';
 import '../ui/views/splash_screen/splash_screen_view.dart';
 import '../ui/views/tim_survei_index_tracking/first_page/first_page_view.dart';
 import '../ui/views/tim_survei_index_tracking/halaman_history/halaman_history_view.dart';
+import '../ui/views/tim_survei_index_tracking/halaman_pengaturan/ganti_password_dialog/ganti_password_dialog_view.dart';
 import '../ui/views/tim_survei_index_tracking/halaman_pengaturan/halaman_pengaturan_view.dart';
 
 import '../ui/views/tim_survei_index_tracking/halaman_survei/bottom_sheet_cari_area/bottom_sheet_cari_area_view.dart';
@@ -32,11 +33,10 @@ import '../ui/views/tim_survei_index_tracking/tim_survei_index_tracking_view.dar
       ],
     ),
   ],
-
-  // dialogs: [
-  //   StackedDialog(classType: BottomSheetCariAreaView),
-  //   // StackedDialog(classType: TambahDetailTimSurveiView)
-  // ],
+  dialogs: [
+    StackedDialog(classType: GantiPasswordDialogView),
+    // StackedDialog(classType: TambahDetailTimSurveiView)
+  ],
   dependencies: [
     LazySingleton(classType: NavigationService),
     LazySingleton(classType: DialogService),

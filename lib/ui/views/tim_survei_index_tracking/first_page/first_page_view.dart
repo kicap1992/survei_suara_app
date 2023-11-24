@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../app/themes/app_colors.dart';
 import '../../../../app/themes/app_text.dart';
@@ -124,11 +125,33 @@ class FirstPageView extends StatelessWidget {
                         ],
                       ),
                     ),
+                    GestureDetector(
+                      onTap: () async {
+                        final url = Uri.parse('https://www.kicap-karan.com');
+                        if (!await launchUrl(url)) {
+                          throw 'Could not launch $url';
+                        }
+                      },
+                      child: Text(
+                        'www.kicap-karan.com',
+                        style: boldTextStyle.copyWith(
+                          color: mainColor,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
           ),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: warningColor,
+            onPressed: () {
+              model.gantiPassword();
+            },
+            child: const Icon(Icons.settings, color: fontColor),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         );
       },
     );

@@ -14,6 +14,7 @@ class TimSurveiIndexTrackingViewModel extends IndexTrackingViewModel {
   final navigationService = locator<NavigationService>();
   final snackbarService = locator<SnackbarService>();
   final globalVar = locator<GlobalVar>();
+  final dialogService = locator<DialogService>();
 
   final _bottomNavBarList = [
     {
@@ -67,5 +68,21 @@ class TimSurveiIndexTrackingViewModel extends IndexTrackingViewModel {
       _views[index],
       id: 5,
     );
+  }
+
+  logout() async {
+    dialogService
+        .showConfirmationDialog(
+      title: 'Konfirmasi',
+      description: 'Apakah anda yakin ingin keluar?',
+      cancelTitle: 'Batal',
+      confirmationTitle: 'Keluar',
+    )
+        .then((value) async {
+      if (value!.confirmed) {
+        await mySharedPrefs.clear();
+        navigationService.clearStackAndShow(Routes.loginScreenView);
+      }
+    });
   }
 }

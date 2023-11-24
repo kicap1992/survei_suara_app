@@ -96,6 +96,18 @@ class DetailSuaraPemilihBottomSheetView extends StatelessWidget {
                   title: 'Tanggal/\nWaktu',
                   value: request.data!.createdAt!,
                 ),
+                _DetailChildWidget(
+                  title: 'Kecamatan',
+                  value: request.data!.kecamatan!,
+                ),
+                _DetailChildWidget(
+                  title: 'Kelurahan/\nDesa',
+                  value: request.data!.kelurahan!,
+                ),
+                _DetailChildWidget(
+                  title: 'TPS',
+                  value: request.data!.tps!.toString(),
+                ),
               ],
             ),
           ),

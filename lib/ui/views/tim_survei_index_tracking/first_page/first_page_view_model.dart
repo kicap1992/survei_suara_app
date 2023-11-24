@@ -1,3 +1,4 @@
+import '../../../../app/app.dialogs.dart';
 import '../../../../app/app.logger.dart';
 import '../../../../app/core/custom_base_view_model.dart';
 import '../../../../model/my_response.model.dart';
@@ -25,6 +26,19 @@ class FirstPageViewModel extends CustomBaseViewModel {
       log.e(e.toString());
     } finally {
       setBusy(false);
+    }
+  }
+
+  gantiPassword() async {
+    var res = await dialogService.showCustomDialog(
+      variant: DialogType.gantiPasswordDialogView,
+      title: 'Ganti Password',
+      mainButtonTitle: 'Simpan',
+      barrierDismissible: false,
+    );
+
+    if (res!.confirmed) {
+      snackbarService.showSnackbar(message: 'Password berhasil diubah');
     }
   }
 }

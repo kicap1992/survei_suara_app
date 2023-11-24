@@ -1,7 +1,7 @@
-import 'package:cek_suara_app/ui/views/tim_survei_index_tracking/first_page/first_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
+import '../first_page/first_page_view.dart';
 import './halaman_pengaturan_view_model.dart';
 
 class HalamanPengaturanView extends StatelessWidget {

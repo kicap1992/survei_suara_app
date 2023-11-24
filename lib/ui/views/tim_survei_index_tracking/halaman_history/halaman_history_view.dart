@@ -104,8 +104,26 @@ class HalamanHistoryView extends StatelessWidget {
                                         model.listPemilih[i].namaPemilih!,
                                         style: boldTextStyle,
                                       ),
-                                      subtitle: Text(
-                                        model.listPemilih[i].namaArea!,
+                                      subtitle: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          CardWidget(
+                                              title: 'Kec',
+                                              value: model
+                                                  .listPemilih[i].kecamatan!),
+                                          CardWidget(
+                                              title: 'Kel / Desa',
+                                              value: model
+                                                  .listPemilih[i].kelurahan!),
+                                          CardWidget(
+                                              title: 'TPS',
+                                              value: model.listPemilih[i].tps!
+                                                  .toString()),
+                                        ],
                                       ),
                                       trailing: IconButton(
                                         icon: const Icon(
@@ -148,6 +166,51 @@ class HalamanHistoryView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class CardWidget extends StatelessWidget {
+  const CardWidget({
+    super.key,
+    required this.title,
+    required this.value,
+  });
+
+  final String title;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 3,
+          child: Text(
+            title,
+            style: italicTextStyle.copyWith(
+              fontSize: 12,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        const Expanded(
+          flex: 1,
+          child: Text(
+            ' : ',
+          ),
+        ),
+        Expanded(
+          flex: 6,
+          child: Text(
+            value,
+            style: boldTextStyle.copyWith(
+              fontSize: 12,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     );
   }
 }
